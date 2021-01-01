@@ -28,8 +28,9 @@ public class WebsocketController {
     @SendToUser("/topic/greetings")
     public Greeting greeting(HelloMessage message, @Header("simpSessionId") String sessionId, Principal principal) throws Exception {
         log.info("Received greeting message {} from {} with sessionId {}", message, principal.getName(), sessionId);
-        greetingService.addUserName(principal.getName());
-        Thread.sleep(1000); // simulated delay
+        //greetingService.addUserName(principal.getName());
+        greetingService.addPlayer(message, principal);
+        //Thread.sleep(1000); // simulated delay
         return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
     }
 //    public Greeting greeting(HelloMessage message) throws Exception {

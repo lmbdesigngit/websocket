@@ -1,4 +1,5 @@
 var stompClient = null;
+var roomId = null;
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -34,8 +35,25 @@ function disconnect() {
     console.log("Disconnected");
 }
 
+
+
+function getRoom() {
+//alert("test");
+//var connection = new http.Connection('http://localhost:8080');
+//var response = connection.getSync('/room');
+//$("#greetings").append(response.response);
+
+    $.ajax({
+        url: "http://localhost:8080/room"
+    }).then(function(data) {
+       $("#greetings").append(data.roomId);
+       console.log("Room" + data.roomId);
+       roomId = data.roomId;
+    });
+}
+
 function sendName() {
-    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
+    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val(), 'room': roomId}));
 }
 
 function showGreeting(message) {
@@ -48,5 +66,6 @@ $(function () {
     });
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
+    $( "#getRoom" ).click(function() { getRoom(); });
     $( "#send" ).click(function() { sendName(); });
 });
